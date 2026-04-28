@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Login | MediCare Hospital{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container form-shell">
+        <div class="form-card">
+            <span class="section-label">Patient Access</span>
+            <h1>Patient Login</h1>
+            <p class="form-subtitle">Log in to book appointments and return to the home page with your session active.</p>
+            {% if appid_configured %}
+                <p class="form-link"><a href="{{ url_for('appid_login', role='patient') }}">Log in with IBM App ID</a></p>
+            {% endif %}
+            <form method="POST" class="app-form">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+                <button type="submit" class="primary-btn full-width">Login as Patient</button>
+            </form>
+            <p class="form-link">New patient? <a href="{{ url_for('patient_register') }}">Create an account</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}

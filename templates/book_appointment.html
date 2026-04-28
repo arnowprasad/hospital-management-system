@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment | MediCare Hospital{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container form-shell form-wide">
+        <div class="form-card">
+            <span class="section-label">Patient Service</span>
+            <h1>Book an Appointment</h1>
+            <p class="form-subtitle">Fill in the details below to save your appointment in the hospital database.</p>
+
+            <div class="appointment-doctors">
+                <h3>Available Doctors</h3>
+                <div class="appointment-doctor-grid">
+                    {% for doctor in doctors %}
+                        <article class="doctor-card compact-doctor-card">
+                            <h4>Dr. {{ doctor.full_name }}</h4>
+                            <p>{{ doctor.specialty }}</p>
+                        </article>
+                    {% else %}
+                        <div class="empty-doctor-state">
+                            No doctors are registered yet. Please add doctors first to enable appointment booking.
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <form method="POST" class="app-form two-column-form">
+                <div>
+                    <label for="patient_name">Patient Name</label>
+                    <input type="text" id="patient_name" name="patient_name" value="{{ current_name or '' }}" placeholder="Enter patient name" required>
+                </div>
+
+                <div>
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="1" max="120" placeholder="Enter age" required>
+                </div>
+
+                <div>
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
+                </div>
+
+                <div>
+                    <label for="doctor_id">Select Doctor</label>
+                    <select id="doctor_id" name="doctor_id" required {% if not doctors %}disabled{% endif %}>
+                        <option value="">Choose a doctor</option>
+                        {% for doctor in doctors %}
+                            <option value="{{ doctor.id }}">Dr. {{ doctor.full_name }} - {{ doctor.specialty }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label for="date">Appointment Date</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+
+                <div>
+                    <label for="time">Appointment Time</label>
+                    <input type="time" id="time" name="time" required>
+                </div>
+
+                <div class="full-span">
+                    <label for="problem">Problem / Description</label>
+                    <textarea id="problem" name="problem" rows="5" placeholder="Describe the health concern" required></textarea>
+                </div>
+
+                <div class="full-span">
+                    <button type="submit" class="primary-btn full-width" {% if not doctors %}disabled{% endif %}>Confirm Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

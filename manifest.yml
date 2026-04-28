@@ -1,0 +1,6 @@
+applications:
+  - name: hospital-management-flask
+    memory: 512M
+    disk_quota: 1G
+    buildpacks:
+      - python_buildpack

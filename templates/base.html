@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MediCare Hospital{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav-shell">
+            <a href="{{ url_for('index') }}" class="brand">MediCare Hospital</a>
+            <button class="nav-toggle" type="button" aria-label="Toggle menu">Menu</button>
+            <nav class="site-nav">
+                <a href="{{ url_for('index') }}#about">About</a>
+                <a href="{{ url_for('index') }}#services">Services</a>
+                <a href="{{ url_for('index') }}#appointments">Appointments</a>
+                <a href="{{ url_for('index') }}#contact">Contact</a>
+                <a href="{{ url_for('auth_portal') }}">Login Portal</a>
+                {% if current_role == "patient" %}
+                    <a href="{{ url_for('book_appointment') }}" class="nav-button">Book Appointment</a>
+                {% elif current_role == "doctor" %}
+                    <a href="{{ url_for('doctor_dashboard') }}" class="nav-button">Doctor Dashboard</a>
+                {% else %}
+                    <a href="{{ url_for('patient_login') }}" class="nav-button">Patient Login</a>
+                {% endif %}
+                {% if logged_in %}
+                    <a href="{{ url_for('logout') }}" class="nav-link-secondary">Logout</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="flash-wrapper container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

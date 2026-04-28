@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}Home | MediCare Hospital{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container hero-grid">
+        <div class="hero-copy">
+            <span class="eyebrow">Trusted Care, Modern Treatment</span>
+            <h1>Your health comes first at MediCare Hospital.</h1>
+            <p>
+                We connect patients and doctors with a simple online system for appointments,
+                records, and timely care. Book visits in minutes and stay informed from one place.
+            </p>
+            <div class="hero-actions">
+                <a href="{{ url_for('book_appointment') if current_role == 'patient' else url_for('patient_login') }}" class="primary-btn">
+                    Book Appointment
+                </a>
+                <a href="{{ url_for('doctor_dashboard') if current_role == 'doctor' else url_for('doctor_login') }}" class="secondary-btn">
+                    Doctor Access
+                </a>
+            </div>
+            <div class="hero-badges">
+                <div class="stat-card">
+                    <strong>{{ doctors|length }}</strong>
+                    <span>Doctors Available</span>
+                </div>
+                <div class="stat-card">
+                    <strong>{{ appointments|length }}</strong>
+                    <span>Appointments Listed</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-panel">
+            <div class="hero-info-card">
+                <h3>Emergency Support</h3>
+                <p>24/7 care team, fast consultation routing, and specialist availability across departments.</p>
+                <ul>
+                    <li>General Medicine</li>
+                    <li>Cardiology</li>
+                    <li>Pediatrics</li>
+                    <li>Orthopedics</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="section">
+    <div class="container section-grid">
+        <div>
+            <span class="section-label">About Us</span>
+            <h2>Care built around comfort, clarity, and speed.</h2>
+        </div>
+        <p class="section-text">
+            MediCare Hospital combines experienced doctors, patient-first service, and a beginner-friendly
+            management system. Patients can register, log in, and book appointments while doctors can
+            review bookings from a secure dashboard.
+        </p>
+    </div>
+</section>
+
+<section id="services" class="section section-muted">
+    <div class="container">
+        <div class="section-heading">
+            <span class="section-label">Services</span>
+            <h2>Hospital services designed for everyday needs.</h2>
+        </div>
+        <div class="card-grid">
+            <article class="info-card">
+                <h3>Online Appointment Booking</h3>
+                <p>Patients can choose a doctor, pick a date and time, and describe their concern clearly.</p>
+            </article>
+            <article class="info-card">
+                <h3>Doctor Dashboard</h3>
+                <p>Doctors can review all their upcoming appointments with patient details in one place.</p>
+            </article>
+            <article class="info-card">
+                <h3>Secure Login System</h3>
+                <p>Separate login and registration flows keep doctor and patient access simple and organized.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-heading">
+            <span class="section-label">Our Doctors</span>
+            <h2>Meet our experienced specialists.</h2>
+        </div>
+        <div class="doctor-grid">
+            <article class="doctor-card">
+                <h3>Dr. Arjun Mehta</h3>
+                <p>Cardiologist</p>
+            </article>
+            <article class="doctor-card">
+                <h3>Dr. Priya Sharma</h3>
+                <p>Pediatrician</p>
+            </article>
+            <article class="doctor-card">
+                <h3>Dr. Rohan Verma</h3>
+                <p>Orthopedic Specialist</p>
+            </article>
+            <article class="doctor-card">
+                <h3>Dr. Neha Kapoor</h3>
+                <p>Dermatologist</p>
+            </article>
+            <article class="doctor-card">
+                <h3>Dr. Vikram Nair</h3>
+                <p>Neurologist</p>
+            </article>
+            <article class="doctor-card">
+                <h3>Dr. Sana Iqbal</h3>
+                <p>General Physician</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section id="appointments" class="section">
+    <div class="container">
+        <div class="section-heading">
+            <span class="section-label">Appointment Records</span>
+            <h2>All booked appointments</h2>
+        </div>
+        <div class="table-shell">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Appointment ID</th>
+                        <th>Patient Name</th>
+                        <th>Doctor Name</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Problem / Reason</th>
+                        {% if current_role == "patient" %}
+                            <th>Action</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                        <tr>
+                            <td>#{{ appointment.id }}</td>
+                            <td>{{ appointment.patient_name }}</td>
+                            <td>Dr. {{ appointment.doctor.full_name }}</td>
+                            <td>{{ appointment.appointment_date.strftime("%d %b %Y") }}</td>
+                            <td>{{ appointment.appointment_time.strftime("%I:%M %p") }}</td>
+                            <td>{{ appointment.problem }}</td>
+                            {% if current_role == "patient" %}
+                                <td>
+                                    {% if appointment.patient_id == current_patient_id %}
+                                        <form method="POST" action="{{ url_for('cancel_appointment', appointment_id=appointment.id) }}">
+                                            <button type="submit" class="danger-btn small-btn">Cancel</button>
+                                        </form>
+                                    {% else %}
+                                        <span class="muted-note">Not yours</span>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="{{ 7 if current_role == 'patient' else 6 }}" class="empty-state">No appointments have been booked yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<footer id="contact" class="site-footer">
+    <div class="container footer-grid">
+        <div>
+            <h3>MediCare Hospital</h3>
+            <p>123 Health Avenue, City Center, India</p>
+        </div>
+        <div>
+            <p>Email: support@medicarehospital.com</p>
+            <p>Phone: +91 98765 43210</p>
+        </div>
+        <div>
+            <p>Open daily for patient assistance and scheduled consultations.</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}

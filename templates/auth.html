@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Login Portal | MediCare Hospital{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container auth-grid">
+        <div class="auth-intro">
+            <span class="section-label">Access Portal</span>
+            <h1>Choose the correct login or registration path.</h1>
+            <p>Patients can book appointments after login, and doctors can manage bookings from their dashboard.</p>
+            {% if appid_configured %}
+                <p>IBM App ID is configured. Use the App ID buttons below and make sure the IBM account email matches your local patient or doctor account.</p>
+            {% else %}
+                <p>IBM App ID is not fully configured yet, so only the local login forms will work.</p>
+            {% endif %}
+        </div>
+        <div class="portal-grid">
+            {% if appid_configured %}
+            <a href="{{ url_for('appid_login', role='patient') }}" class="portal-card">
+                <h3>Patient Login with IBM App ID</h3>
+                <p>Authenticate with IBM App ID and link to a patient record by email.</p>
+            </a>
+            <a href="{{ url_for('appid_login', role='doctor') }}" class="portal-card">
+                <h3>Doctor Login with IBM App ID</h3>
+                <p>Authenticate with IBM App ID and link to a doctor record by email.</p>
+            </a>
+            {% endif %}
+            <a href="{{ url_for('patient_login') }}" class="portal-card">
+                <h3>Patient Login</h3>
+                <p>Sign in to book and manage your appointment flow.</p>
+            </a>
+            <a href="{{ url_for('patient_register') }}" class="portal-card">
+                <h3>Patient Register</h3>
+                <p>Create a patient account with your contact details.</p>
+            </a>
+            <a href="{{ url_for('doctor_login') }}" class="portal-card">
+                <h3>Doctor Login</h3>
+                <p>Access your appointment dashboard and review patients.</p>
+            </a>
+            <a href="{{ url_for('doctor_register') }}" class="portal-card">
+                <h3>Doctor Register</h3>
+                <p>Create a doctor account with your specialization details.</p>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Doctor Registration | MediCare Hospital{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container form-shell">
+        <div class="form-card">
+            <span class="section-label">Doctor Registration</span>
+            <h1>Create Doctor Account</h1>
+            <form method="POST" class="app-form">
+                <label for="full_name">Full Name</label>
+                <input type="text" id="full_name" name="full_name" list="doctor-name-list" placeholder="Example: Dr. Arjun Mehta" required>
+                <datalist id="doctor-name-list">
+                    <option value="Dr. Arjun Mehta"></option>
+                    <option value="Dr. Priya Sharma"></option>
+                    <option value="Dr. Rohan Verma"></option>
+                    <option value="Dr. Neha Kapoor"></option>
+                    <option value="Dr. Vikram Nair"></option>
+                    <option value="Dr. Sana Iqbal"></option>
+                </datalist>
+                <p class="field-hint">Sample names: Dr. Arjun Mehta, Dr. Priya Sharma, Dr. Rohan Verma</p>
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter email address" required>
+
+                <label for="specialty">Specialization</label>
+                <input type="text" id="specialty" name="specialty" list="doctor-specialty-list" placeholder="Example: Cardiologist" required>
+                <datalist id="doctor-specialty-list">
+                    <option value="Cardiologist"></option>
+                    <option value="Pediatrician"></option>
+                    <option value="Orthopedic Specialist"></option>
+                    <option value="Dermatologist"></option>
+                    <option value="Neurologist"></option>
+                    <option value="General Physician"></option>
+                </datalist>
+                <p class="field-hint">Example specialties: Cardiologist, Pediatrician, Neurologist</p>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Create password" required>
+
+                <button type="submit" class="primary-btn full-width">Register as Doctor</button>
+            </form>
+            <p class="form-link">Already registered? <a href="{{ url_for('doctor_login') }}">Login here</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}
